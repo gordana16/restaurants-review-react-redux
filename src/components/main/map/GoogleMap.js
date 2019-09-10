@@ -12,7 +12,7 @@ class GoogleMap extends Component {
     this.ref = React.createRef();
     this.service = null;
     this.state = {
-      loadError: null,
+      onLoadError: null,
       redirect: false,
       placeId: null
     };
@@ -38,9 +38,9 @@ class GoogleMap extends Component {
           });
           resolve();
         })
-        .catch(error => {
-          this.setState({ error });
-          reject(error);
+        .catch(onLoadError => {
+          this.setState({ onLoadError });
+          // reject(onLoadError);
         });
     });
   };
@@ -56,8 +56,8 @@ class GoogleMap extends Component {
     return <MapMarkers redirect={this.navigatePage} />;
   }
   render() {
-    const { loadError, redirect, placeId } = this.state;
-    const error = loadError || this.props.error;
+    const { onLoadError, redirect, placeId } = this.state;
+    const error = onLoadError || this.props.error;
     if (redirect) {
       return <Redirect to={`places/${placeId}`} />;
     }
