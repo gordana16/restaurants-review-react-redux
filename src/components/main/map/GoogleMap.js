@@ -50,7 +50,7 @@ class GoogleMap extends Component {
   };
 
   renderMarkers() {
-    if (!this.props.places.length) {
+    if (!this.props.places.length || !this.ref.current) {
       return null;
     }
     return <MapMarkers redirect={this.navigatePage} />;

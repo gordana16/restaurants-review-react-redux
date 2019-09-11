@@ -8,9 +8,6 @@ class MapMarker extends Component {
 
   componentDidMount() {
     const { place, infoWindow, redirect } = this.props;
-    if (!window.google) {
-      return;
-    }
     const marker = new window.google.maps.Marker({
       icon: "img/place_icon.png",
       title: place.name,

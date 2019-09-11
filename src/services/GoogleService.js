@@ -8,54 +8,54 @@ class GoogleService {
     }
     instance = this;
     this.map = null;
-    this.location = null;
   }
+
   init(mapNode) {
     return new Promise((resolve, reject) => {
       if (window.google) {
-        resolve(this.map);
+        this.createMap(mapNode);
+        resolve();
+      } else {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
+        script.async = true;
+        const elem = document.getElementsByTagName("script")[0];
+        elem.parentNode.insertBefore(script, elem);
+        script.onload = () => {
+          this.createMap(mapNode);
+          resolve();
+        };
       }
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
-      script.async = true;
-      const elem = document.getElementsByTagName("script")[0];
-      elem.parentNode.insertBefore(script, elem);
-      script.onload = () => {
-        this.map = new window.google.maps.Map(mapNode, {
-          center: { lat: 0, lng: 0 },
-          zoom: 14
-        });
-
-        resolve(this.map); // resolve with script, not event
-      };
     });
   }
 
+  createMap(mapNode) {
+    this.map = new window.google.maps.Map(mapNode, {
+      center: { lat: 0, lng: 0 },
+      zoom: 14
+    });
+  }
   getMap() {
     return this.map;
   }
 
   getCurrentLocation() {
     return new Promise((resolve, reject) => {
-      if (this.location) {
-        resolve(this.location);
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            this.location = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            this.map.setCenter(this.location);
+            resolve(this.location);
+          },
+          err => reject(err.message)
+        );
       } else {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            position => {
-              this.location = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-              };
-              this.map.setCenter(this.location);
-              resolve(this.location);
-            },
-            err => reject(err.message)
-          );
-        } else {
-          reject("Browser does not support geolocation");
-        }
+        reject("Browser does not support geolocation");
       }
     });
   }
