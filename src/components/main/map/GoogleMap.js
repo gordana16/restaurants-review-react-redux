@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import GoogleService from "../../../services/GoogleService";
+import google from "../../../services/GoogleService";
 import MapMarkers from "./MapMarkers";
 import GoogleErr from "../../../shared/errors/GoogleErr";
 import { fetchPlaces } from "../../../actions";
@@ -10,7 +10,6 @@ class GoogleMap extends Component {
   constructor() {
     super();
     this.ref = React.createRef();
-    this.service = null;
     this.state = {
       onLoadError: null,
       redirect: false,
@@ -19,19 +18,19 @@ class GoogleMap extends Component {
   }
 
   componentDidMount() {
-    this.service = new GoogleService();
-    this.service
-      .init(this.ref.current)
+    google
+      .getAPI()
+      .then(() => google.initService(this.ref.current))
       .then(() => this.onScriptLoad())
       .then(() => this.props.fetchPlaces());
   }
 
   onScriptLoad = () => {
     return new Promise((resolve, reject) => {
-      this.service
+      google
         .getCurrentLocation()
         .then(location => {
-          const map = this.service.getMap();
+          const map = google.getMap();
           new window.google.maps.Marker({
             position: location,
             map: map
@@ -40,7 +39,6 @@ class GoogleMap extends Component {
         })
         .catch(onLoadError => {
           this.setState({ onLoadError });
-          // reject(onLoadError);
         });
     });
   };
@@ -59,7 +57,7 @@ class GoogleMap extends Component {
     const { onLoadError, redirect, placeId } = this.state;
     const error = onLoadError || this.props.error;
     if (redirect) {
-      return <Redirect to={`places/${placeId}`} />;
+      return <Redirect to={`/places/${placeId}`} />;
     }
     return (
       <React.Fragment>

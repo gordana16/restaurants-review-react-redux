@@ -21,6 +21,26 @@
   color: #069;
   text-decoration: underline; }
 
+.place-detail .reviews {
+  height: 90vh;
+  overflow: auto;
+  background-color: blue; }
+
+.place-detail .heading {
+  height: 4rem;
+  display: flex; }
+  .place-detail .heading h1 {
+    font-weight: 600; }
+
+.place-detail .photos .carousel-item img {
+  height: 60vh; }
+
+.review-container {
+  background-color: #faf9f9;
+  padding: 1.5rem; }
+  .review-container .review-form .form-control {
+    font-size: 1.3rem; }
+
 html {
   font-size: 62.5%; }
 
@@ -30,3 +50,12 @@ body {
   font-size: 1.6rem;
   line-height: 1.6;
   min-height: 100vh; }
+
+.btn-rr {
+  background-color: #e6db07;
+  border-color: #e6db07;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.6rem; }
+  .btn-rr:hover, .btn-rr:focus, .btn-rr:active {
+    color: white; }

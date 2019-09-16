@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import GoogleService from "../../../../services/GoogleService";
+import google from "../../../../services/GoogleService";
 import InfoWindowContent from "./InfoWindowContent";
 
 class MapMarker extends Component {
-  map = new GoogleService().getMap();
+  map = google.getMap();
 
   componentDidMount() {
+    if (!this.map) {
+      return;
+    }
     const { place, infoWindow, redirect } = this.props;
     const marker = new window.google.maps.Marker({
       icon: "img/place_icon.png",
@@ -21,7 +24,7 @@ class MapMarker extends Component {
       window.google.maps.event.addListener(infoWindow, "domready", () => {
         document
           .getElementById("info-window-btn")
-          .addEventListener("click", () => redirect(place.id));
+          .addEventListener("click", () => redirect(place.place_id));
       });
 
       infoWindow.setContent(content.innerHTML);
