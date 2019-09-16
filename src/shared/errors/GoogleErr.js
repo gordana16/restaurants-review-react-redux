@@ -1,11 +1,13 @@
-import GoogleService from "../../services/GoogleService";
+import React from "react";
+import google from "../../services/GoogleService";
 
-const GoogleErr = ({ error, location = null }) => {
-  if (!error) {
+const GoogleErr = ({ error }) => {
+  const map = google.getMap();
+  if (!error || !map) {
     return null;
   }
-  const map = new GoogleService().getMap();
-  const infoPosition = location ? location : map.getCenter();
+
+  const infoPosition = map.getCenter();
   const infowindow = new window.google.maps.InfoWindow({
     content: `<div>${error}</div>`,
     maxWidth: 300
@@ -14,7 +16,11 @@ const GoogleErr = ({ error, location = null }) => {
   map.setOptions({ disableDefaultUI: true });
   infowindow.open(map);
   infowindow.setPosition(infoPosition);
-  return null;
+  return (
+    <div className="alert alert-danger ">
+      <p>{error}</p>
+    </div>
+  );
 };
 
 export default GoogleErr;

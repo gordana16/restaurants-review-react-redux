@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   error: undefined
 };
 
-export const placesReducer = (state = INITIAL_STATE, action) => {
+export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FETCH_PLACES_SUCCESS: {
       return { ...state, data: action.payload, error: undefined };

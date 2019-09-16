@@ -7,3 +7,36 @@
     text-decoration: underline;
   }
 }
+
+.place-detail {
+  .reviews {
+    height: 90vh;
+    overflow: auto;
+    background-color: blue;
+  }
+  .heading {
+    height: 4rem;
+    display: flex;
+
+    h1 {
+      font-weight: 600;
+    }
+  }
+
+  .photos {
+    .carousel-item {
+      img {
+        height: 60vh;
+      }
+    }
+  }
+}
+.review-container {
+  background-color: $color-grey-light-1;
+  padding: 1.5rem;
+  .review-form {
+    .form-control {
+      font-size: 1.3rem;
+    }
+  }
+}

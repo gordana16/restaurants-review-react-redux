@@ -1,2 +1,3 @@
 export const FETCH_PLACES_SUCCESS = "FETCH_PLACES";
 export const FETCH_PLACES_FAIL = "FETCH_PLACES_FAIL";
+export const ADD_REVIEW = "ADD_REVIEW";

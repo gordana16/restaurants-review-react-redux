@@ -8,13 +8,13 @@ class GoogleService {
     }
     instance = this;
     this.map = null;
+    this.placesService = null;
   }
 
-  init(mapNode) {
+  getAPI() {
     return new Promise((resolve, reject) => {
       if (window.google) {
-        this.createMap(mapNode);
-        resolve();
+        return resolve();
       } else {
         const script = document.createElement("script");
         script.type = "text/javascript";
@@ -23,19 +23,24 @@ class GoogleService {
         const elem = document.getElementsByTagName("script")[0];
         elem.parentNode.insertBefore(script, elem);
         script.onload = () => {
-          this.createMap(mapNode);
           resolve();
         };
       }
     });
   }
 
-  createMap(mapNode) {
-    this.map = new window.google.maps.Map(mapNode, {
+  initService(mapNode) {
+    if (this.placesService && !mapNode) {
+      return;
+    }
+    const container = mapNode ? mapNode : document.createElement("div");
+    this.map = new window.google.maps.Map(container, {
       center: { lat: 0, lng: 0 },
       zoom: 14
     });
+    this.placesService = new window.google.maps.places.PlacesService(this.map);
   }
+
   getMap() {
     return this.map;
   }
@@ -62,11 +67,10 @@ class GoogleService {
 
   getNearbyPlaces() {
     return new Promise((resolve, reject) => {
-      if (!this.map || !this.location) {
+      if (!this.map) {
         reject("Google Place Service could not been loaded");
       } else {
-        const service = new window.google.maps.places.PlacesService(this.map);
-        service.nearbySearch(
+        this.placesService.nearbySearch(
           {
             location: this.location,
             radius: "5000",
@@ -83,6 +87,18 @@ class GoogleService {
       }
     });
   }
+
+  getPlaceDetails(placeId) {
+    return new Promise((resolve, reject) => {
+      this.placesService.getDetails({ placeId: placeId }, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          resolve(results);
+        } else {
+          reject(`Google Place Service failed with status ${status}`);
+        }
+      });
+    });
+  }
 }
 
-export default GoogleService;
+export default new GoogleService();
