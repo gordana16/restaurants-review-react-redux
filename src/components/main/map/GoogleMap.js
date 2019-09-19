@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import google from "../../../services/GoogleService";
 import MapMarkers from "./MapMarkers";
-import GoogleErr from "../../../shared/errors/GoogleErr";
+import ErrorModal from "../../../shared/errors/ErrorModal";
 import { fetchPlaces } from "../../../actions";
 
 class GoogleMap extends Component {
@@ -63,14 +63,17 @@ class GoogleMap extends Component {
       <React.Fragment>
         <div className="map" ref={this.ref} />
         {this.renderMarkers()}
-        <GoogleErr error={error} />
+        <ErrorModal error={error} />
       </React.Fragment>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { places: state.places.data, error: state.places.error };
+  return {
+    places: state.places.data,
+    error: state.places.error
+  };
 };
 export default connect(
   mapStateToProps,

@@ -14,17 +14,13 @@
     text-decoration: none;
     color: #333; }
 
-.info-window .info-btn {
-  border: none;
-  background-color: #ffff;
-  padding: 0;
-  color: #069;
-  text-decoration: underline; }
+.info-window .btn-more {
+  font-size: 1.2rem;
+  padding-left: 0px; }
 
 .place-detail .reviews {
   height: 90vh;
-  overflow: auto;
-  background-color: blue; }
+  overflow: auto; }
 
 .place-detail .heading {
   height: 4rem;
@@ -59,3 +55,15 @@ body {
   font-size: 1.6rem; }
   .btn-rr:hover, .btn-rr:focus, .btn-rr:active {
     color: white; }
+
+.btn-toggle {
+  font-size: 1.2rem; }
+  .btn-toggle:hover, .btn-toggle:focus, .btn-toggle:active {
+    text-decoration: none; }
+
+.error-modal-content {
+  max-width: 30rem;
+  margin-top: 3rem;
+  padding: 0 1rem; }
+  .error-modal-content h2 {
+    color: red; }

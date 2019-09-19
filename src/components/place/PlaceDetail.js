@@ -3,28 +3,19 @@ import { connect } from "react-redux";
 import { UncontrolledCarousel } from "reactstrap";
 import StarRatings from "react-star-ratings";
 import { ToastContainer, toast } from "react-toastify";
-import google from "../../services/GoogleService";
-import GoogleErr from "../../shared/errors/GoogleErr";
+import ErrorModal from "../../shared/errors/ErrorModal";
 import ReviewForm from "./ReviewForm";
+import Reviews from "./Reviews";
 import { fetchPlaceDetails, addReview } from "../../actions";
 
 class PlaceDetail extends Component {
-  state = {
-    error: null,
-    place: {}
-  };
   componentDidMount() {
     const { id } = this.props.match.params;
-    google
-      .getAPI()
-      .then(() => google.initService())
-      .then(() => fetchPlaceDetails(id))
-      .then(place => this.setState({ place }))
-      .catch(error => this.setState({ error }));
+    this.props.fetchPlaceDetails(id);
   }
 
   renderCarousel = () => {
-    const { photos } = this.state.place;
+    const { photos } = this.props.place;
     if (!photos) {
       return null;
     }
@@ -41,15 +32,19 @@ class PlaceDetail extends Component {
 
   onSubmit = review => {
     const { id } = this.props.match.params;
-    this.props.addReview(id, review);
+    this.props.addReview(id, { ...review, time: Date.now() });
     toast.success("Review is successfully submitted!");
   };
 
   render() {
-    const { place, error } = this.state;
+    const { place, error } = this.props;
     if (error) {
-      return <GoogleErr error={error} />;
+      return <ErrorModal error={error} redirectTo={"/places"} />;
     }
+
+    if (Object.entries(place).length === 0 && place.constructor === Object)
+      return <div>Loading...</div>;
+
     return (
       <div className="place-detail container-fluid">
         <ToastContainer />
@@ -89,16 +84,21 @@ class PlaceDetail extends Component {
               </div>
             </div>
           </div>
-          <div className="reviews col-md-3 mt-3 mt-md-0">Reviews</div>
+          <div className="reviews col-md-3 mt-3 mt-md-0">
+            <Reviews reviews={place.reviews} />
+          </div>
         </div>
       </div>
     );
   }
 }
 const mapStateToProps = state => {
-  return { reviews: state.reviews };
+  return {
+    place: state.place.details,
+    error: state.place.error
+  };
 };
 export default connect(
   mapStateToProps,
-  { addReview }
+  { addReview, fetchPlaceDetails }
 )(PlaceDetail);
