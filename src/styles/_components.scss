@@ -1,10 +1,7 @@
 .info-window {
-  .info-btn {
-    border: none;
-    background-color: #ffff;
-    padding: 0;
-    color: #069;
-    text-decoration: underline;
+  .btn-more {
+    font-size: 1.2rem;
+    padding-left: 0px;
   }
 }
 
@@ -12,7 +9,6 @@
   .reviews {
     height: 90vh;
     overflow: auto;
-    background-color: blue;
   }
   .heading {
     height: 4rem;

@@ -8,7 +8,11 @@ class InfoWindowContent extends Component {
       <div className="info-window">
         <h4> {place.name} </h4>
         <p> {place.vicinity} </p>
-        <button className="info-btn" id="info-window-btn" type="button">
+        <button
+          className="btn btn-link btn-more"
+          id="info-window-btn"
+          type="button"
+        >
           More info
         </button>
       </div>
