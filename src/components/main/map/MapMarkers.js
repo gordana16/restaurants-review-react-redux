@@ -4,12 +4,10 @@ import MapMarker from "./marker/MapMarker";
 
 class MapMarkers extends Component {
   renderMarkers = () => {
-    const infoWindow = new window.google.maps.InfoWindow();
     return this.props.places.map(place => (
       <MapMarker
-        key={place.id}
+        key={place.place_id}
         place={place}
-        infoWindow={infoWindow}
         redirect={this.props.redirect}
       />
     ));

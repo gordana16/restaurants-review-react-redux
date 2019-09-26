@@ -1,15 +1,21 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import { connect, Provider, ReactReduxContext } from "react-redux";
 import { Redirect } from "react-router-dom";
+import ReactDOM from "react-dom";
+import { ToastContainer, toast } from "react-toastify";
 import google from "../../../services/GoogleService";
 import MapMarkers from "./MapMarkers";
+import AddPlaceForm from "./AddPlaceForm";
 import ErrorModal from "../../../shared/errors/ErrorModal";
-import { fetchPlaces } from "../../../actions";
+import { fetchPlaces, addPlace, resetAddPlaceForm } from "../../../actions";
 
 class GoogleMap extends Component {
-  constructor() {
-    super();
+  static contextType = ReactReduxContext;
+  constructor(props) {
+    super(props);
+
     this.ref = React.createRef();
+    this.infoWindow = null;
     this.state = {
       onLoadError: null,
       redirect: false,
@@ -25,6 +31,47 @@ class GoogleMap extends Component {
       .then(() => this.props.fetchPlaces());
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      !prevProps.isFetching &&
+      this.props.places.length > prevProps.places.length
+    ) {
+      google.getInfoWindow().close();
+      toast.success("Place is successfully submitted!");
+    }
+  }
+
+  handleSubmitPlace = place => {
+    this.props.addPlace(place);
+  };
+
+  createInfoWindow(event, map) {
+    const { latLng } = event;
+    const infoWindow = google.getInfoWindow();
+    infoWindow.setOptions({
+      content: '<div id="iw-place"/>',
+      position: { lat: latLng.lat(), lng: latLng.lng() }
+    });
+    const store = this.context.store;
+
+    infoWindow.addListener("domready", () => {
+      ReactDOM.render(
+        <Provider store={store}>
+          <div className="info-window">
+            <h4>Add new place: </h4>
+            <AddPlaceForm onSubmit={this.handleSubmitPlace} />
+          </div>
+        </Provider>,
+        document.getElementById("iw-place")
+      );
+    });
+
+    ["closeclick", "position_changed"].forEach(e =>
+      infoWindow.addListener(e, () => this.props.resetAddPlaceForm())
+    );
+    infoWindow.open(map);
+  }
+
   onScriptLoad = () => {
     return new Promise((resolve, reject) => {
       google
@@ -35,6 +82,10 @@ class GoogleMap extends Component {
             position: location,
             map: map
           });
+          map.addListener("click", event => {
+            this.createInfoWindow(event, map);
+          });
+
           resolve();
         })
         .catch(onLoadError => {
@@ -48,7 +99,8 @@ class GoogleMap extends Component {
   };
 
   renderMarkers() {
-    if (!this.props.places.length || !this.ref.current) {
+    const { isFetching } = this.props;
+    if (isFetching) {
       return null;
     }
     return <MapMarkers redirect={this.navigatePage} />;
@@ -62,6 +114,7 @@ class GoogleMap extends Component {
     return (
       <React.Fragment>
         <div className="map" ref={this.ref} />
+        <ToastContainer />
         {this.renderMarkers()}
         <ErrorModal error={error} />
       </React.Fragment>
@@ -70,12 +123,14 @@ class GoogleMap extends Component {
 }
 
 const mapStateToProps = state => {
+  const { data, error, isFetching } = state.places;
   return {
-    places: state.places.data,
-    error: state.places.error
+    places: data,
+    error: error,
+    isFetching: isFetching
   };
 };
 export default connect(
   mapStateToProps,
-  { fetchPlaces }
+  { fetchPlaces, addPlace, resetAddPlaceForm }
 )(GoogleMap);

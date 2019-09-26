@@ -7,7 +7,7 @@ class Places extends Component {
   renderPlaces() {
     const { places } = this.props;
     return places.map(place => (
-      <li className="list-group-item" key={place.id}>
+      <li className="list-group-item" key={place.place_id}>
         <StarRatings
           rating={place.rating}
           starRatedColor="orange"

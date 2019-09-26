@@ -14,9 +14,11 @@
     text-decoration: none;
     color: #333; }
 
-.info-window .btn-more {
-  font-size: 1.2rem;
-  padding-left: 0px; }
+.info-window {
+  padding-top: 1rem; }
+  .info-window .btn-more {
+    font-size: 1.2rem;
+    padding-left: 0px; }
 
 .place-detail .reviews {
   height: 90vh;
@@ -37,6 +39,22 @@
   .review-container .review-form .form-control {
     font-size: 1.3rem; }
 
+.btn-form {
+  background-color: #e6db07;
+  border-color: #e6db07;
+  color: white;
+  font-size: 1.2rem; }
+  .btn-form:hover, .btn-form:focus, .btn-form:active {
+    color: white; }
+
+.btn-rw {
+  padding: 0.5rem 1.5rem; }
+
+.btn-toggle {
+  font-size: 1.2rem; }
+  .btn-toggle:hover, .btn-toggle:focus, .btn-toggle:active {
+    text-decoration: none; }
+
 html {
   font-size: 62.5%; }
 
@@ -46,20 +64,6 @@ body {
   font-size: 1.6rem;
   line-height: 1.6;
   min-height: 100vh; }
-
-.btn-rr {
-  background-color: #e6db07;
-  border-color: #e6db07;
-  color: white;
-  padding: 0.5rem 1.5rem;
-  font-size: 1.6rem; }
-  .btn-rr:hover, .btn-rr:focus, .btn-rr:active {
-    color: white; }
-
-.btn-toggle {
-  font-size: 1.2rem; }
-  .btn-toggle:hover, .btn-toggle:focus, .btn-toggle:active {
-    text-decoration: none; }
 
 .error-modal-content {
   max-width: 30rem;

@@ -14,6 +14,16 @@ class PlaceDetail extends Component {
     this.props.fetchPlaceDetails(id);
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      !prevProps.isFetching &&
+      prevProps.place.reviews &&
+      this.props.place.reviews.length > prevProps.place.reviews.length
+    ) {
+      toast.success("Review is successfully submitted!");
+    }
+  }
+
   renderCarousel = () => {
     const { photos } = this.props.place;
     if (!photos) {
@@ -33,17 +43,18 @@ class PlaceDetail extends Component {
   onSubmit = review => {
     const { id } = this.props.match.params;
     this.props.addReview(id, { ...review, time: Date.now() });
-    toast.success("Review is successfully submitted!");
   };
 
   render() {
-    const { place, error } = this.props;
+    const { place, error, isFetching } = this.props;
+
+    if (isFetching) {
+      return <div>Loading...</div>;
+    }
+
     if (error) {
       return <ErrorModal error={error} redirectTo={"/places"} />;
     }
-
-    if (Object.entries(place).length === 0 && place.constructor === Object)
-      return <div>Loading...</div>;
 
     return (
       <div className="place-detail container-fluid">
@@ -84,7 +95,7 @@ class PlaceDetail extends Component {
               </div>
             </div>
           </div>
-          <div className="reviews col-md-3 mt-3 mt-md-0">
+          <div className="reviews col-md-3 mt-3 mt-md-0 ">
             <Reviews reviews={place.reviews} />
           </div>
         </div>
@@ -93,9 +104,11 @@ class PlaceDetail extends Component {
   }
 }
 const mapStateToProps = state => {
+  const { details, error, isFetching } = state.place;
   return {
-    place: state.place.details,
-    error: state.place.error
+    place: details,
+    error: error,
+    isFetching: isFetching
   };
 };
 export default connect(
