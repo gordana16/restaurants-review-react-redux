@@ -10,7 +10,7 @@ class MapMarker extends Component {
     if (!this.map) {
       return;
     }
-    const { place, infoWindow, redirect } = this.props;
+    const { place, redirect } = this.props;
     const marker = new window.google.maps.Marker({
       icon: "img/place_icon.png",
       title: place.name,
@@ -19,15 +19,17 @@ class MapMarker extends Component {
     marker.setMap(this.map);
 
     marker.addListener("click", function() {
-      const content = document.createElement("div");
-      ReactDOM.render(<InfoWindowContent place={place} />, content);
-      window.google.maps.event.addListener(infoWindow, "domready", () => {
+      const infoWindow = google.getInfoWindow();
+      infoWindow.setContent('<div id="iw-marker"/>');
+      infoWindow.addListener("domready", () => {
+        ReactDOM.render(
+          <InfoWindowContent place={place} />,
+          document.getElementById("iw-marker")
+        );
         document
-          .getElementById("info-window-btn")
+          .getElementById("iw-btn")
           .addEventListener("click", () => redirect(place.place_id));
       });
-
-      infoWindow.setContent(content.innerHTML);
       infoWindow.open(this.map, marker);
     });
   }

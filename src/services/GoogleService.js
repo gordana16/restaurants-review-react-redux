@@ -9,6 +9,7 @@ class GoogleService {
     instance = this;
     this.map = null;
     this.placesService = null;
+    this.infoWindow = null;
   }
 
   getAPI() {
@@ -39,12 +40,19 @@ class GoogleService {
       zoom: 14
     });
     this.placesService = new window.google.maps.places.PlacesService(this.map);
+    this.infoWindow = new window.google.maps.InfoWindow();
   }
 
   getMap() {
     return this.map;
   }
 
+  getInfoWindow() {
+    if (window.google) {
+      window.google.maps.event.clearListeners(this.infoWindow, "domready");
+    }
+    return this.infoWindow;
+  }
   getCurrentLocation() {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {

@@ -11,9 +11,7 @@ class ToggleText extends Component {
     };
   }
   handleTruncate = truncated => {
-    console.log("truncated", truncated, this.state.truncated);
     if (this.state.truncated !== truncated) {
-      console.log("setState to", truncated);
       this.setState({
         truncated
       });
@@ -36,7 +34,10 @@ class ToggleText extends Component {
           lines={!expanded && lines}
           ellipsis={
             <span>
-              <button className="btn btn-link btn-toggle" onClick={this.toggleLines}>
+              <button
+                className="btn btn-link btn-toggle"
+                onClick={this.toggleLines}
+              >
                 {more}
               </button>
             </span>
@@ -47,7 +48,10 @@ class ToggleText extends Component {
         </Truncate>
         {!truncated && expanded && (
           <span>
-            <button className="btn btn-link btn-toggle" onClick={this.toggleLines}>
+            <button
+              className="btn btn-link btn-toggle"
+              onClick={this.toggleLines}
+            >
               {less}
             </button>
           </span>

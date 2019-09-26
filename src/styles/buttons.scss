@@ -1,0 +1,25 @@
+.btn-form {
+  background-color: $main-yellow-color;
+  border-color: $main-yellow-color;
+  color: white;
+  // padding: 0.5rem 1.5rem;
+  font-size: 1.2rem;
+  &:hover,
+  &:focus,
+  &:active {
+    color: white;
+  }
+}
+
+.btn-rw {
+  padding: 0.5rem 1.5rem;
+}
+
+.btn-toggle {
+  font-size: 1.2rem;
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+  }
+}
