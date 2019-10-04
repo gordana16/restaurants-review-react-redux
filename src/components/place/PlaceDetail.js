@@ -6,7 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import ErrorModal from "../../shared/errors/ErrorModal";
 import ReviewForm from "./ReviewForm";
 import Reviews from "./Reviews";
-import { fetchPlaceDetails, addReview } from "../../actions";
+import { fetchPlaceDetails, addReview, updateRating } from "../../actions";
+import { getPlace, getError, isFetching } from "../../selectors/placeSelector";
 
 class PlaceDetail extends Component {
   componentDidMount() {
@@ -17,10 +18,12 @@ class PlaceDetail extends Component {
   componentDidUpdate(prevProps) {
     if (
       !prevProps.isFetching &&
-      prevProps.place.reviews &&
       this.props.place.reviews.length > prevProps.place.reviews.length
     ) {
       toast.success("Review is successfully submitted!");
+      //send an action to update place rating in array of places
+      const { place } = this.props;
+      this.props.updateRating(place.place_id, place.rating);
     }
   }
 
@@ -41,8 +44,8 @@ class PlaceDetail extends Component {
   };
 
   onSubmit = review => {
-    const { id } = this.props.match.params;
-    this.props.addReview(id, { ...review, time: Date.now() });
+    const { place_id } = this.props.place;
+    this.props.addReview(place_id, { ...review, time: Date.now() });
   };
 
   render() {
@@ -104,14 +107,13 @@ class PlaceDetail extends Component {
   }
 }
 const mapStateToProps = state => {
-  const { details, error, isFetching } = state.place;
   return {
-    place: details,
-    error: error,
-    isFetching: isFetching
+    place: getPlace(state),
+    error: getError(state),
+    isFetching: isFetching(state)
   };
 };
 export default connect(
   mapStateToProps,
-  { addReview, fetchPlaceDetails }
+  { addReview, updateRating, fetchPlaceDetails }
 )(PlaceDetail);

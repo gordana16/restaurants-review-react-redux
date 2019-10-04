@@ -7,8 +7,7 @@ import FormTextArea from "../../shared/form/FormTextArea";
 
 class ReviewForm extends Component {
   render() {
-    const { handleSubmit, pristine, submitSucceeded, onSubmit } = this.props;
-    console.log(submitSucceeded);
+    const { handleSubmit, pristine, submitSucceeded, onSubmit } = this.props;   
     return (
       <form className="review-form" onSubmit={handleSubmit(onSubmit)}>
         <Field

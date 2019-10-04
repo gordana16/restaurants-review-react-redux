@@ -7,13 +7,11 @@ import reduxThunk from "redux-thunk";
 import { Provider } from "react-redux";
 import App from "./App";
 import reducers from "./reducers";
-import fetchSinglePlace from "./middlewares/fetchSinglePlace";
-import fetchPlaces from "./middlewares/fetchPlaces";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers,
-  composeEnhancers(applyMiddleware(reduxThunk, fetchSinglePlace, fetchPlaces))
+  composeEnhancers(applyMiddleware(reduxThunk))
 );
 
 ReactDOM.render(
