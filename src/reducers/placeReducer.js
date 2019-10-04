@@ -1,11 +1,8 @@
 import {
   FETCH_PLACE_BY_ID_INIT,
   FETCH_PLACE_BY_ID_START,
-  FETCH_PLACE_BY_ID_END,
   FETCH_PLACE_BY_ID_SUCCESS,
-  FETCH_PLACE_BY_ID_FAIL,
-  MERGE_REVIEWS_BY_ID,
-  ADD_REVIEW_SUCCESS
+  FETCH_PLACE_BY_ID_FAIL
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -24,54 +21,11 @@ export default (state = INITIAL_STATE, action) => {
     }
 
     case FETCH_PLACE_BY_ID_SUCCESS: {
-      return { ...state, details: action.payload };
+      return { ...state, details: action.payload, isFetching: false };
     }
 
     case FETCH_PLACE_BY_ID_FAIL: {
-      return { ...state, error: action.payload };
-    }
-
-    case FETCH_PLACE_BY_ID_END: {
-      return { ...state, isFetching: false };
-    }
-
-    case ADD_REVIEW_SUCCESS: {
-      const { review } = action.payload;
-      const { reviews } = state.details;
-      if (!reviews) {
-        return {
-          ...state,
-          details: {
-            ...state.details,
-            reviews: [review]
-          }
-        };
-      }
-      return {
-        ...state,
-        details: {
-          ...state.details,
-          reviews: [...reviews, review]
-        }
-      };
-    }
-
-    case MERGE_REVIEWS_BY_ID: {
-      const localReviews = action.payload;
-      const { reviews } = state.details;
-      if (!reviews) {
-        return {
-          ...state,
-          details: { ...state.details, reviews: localReviews }
-        };
-      }
-      return {
-        ...state,
-        details: {
-          ...state.details,
-          reviews: [...reviews, ...localReviews]
-        }
-      };
+      return { ...state, error: action.payload, isFetching: false };
     }
 
     default: {

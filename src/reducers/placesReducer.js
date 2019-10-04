@@ -1,11 +1,8 @@
 import {
   FETCH_PLACES_INIT,
   FETCH_PLACES_START,
-  FETCH_PLACES_END,
   FETCH_PLACES_SUCCESS,
-  FETCH_PLACES_FAIL,
-  ADD_PLACE_SUCCESS,
-  MERGE_PLACES
+  FETCH_PLACES_FAIL
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -25,27 +22,11 @@ export default (state = INITIAL_STATE, action) => {
     }
 
     case FETCH_PLACES_SUCCESS: {
-      return { ...state, data: action.payload };
+      return { ...state, data: action.payload, isFetching: false };
     }
 
     case FETCH_PLACES_FAIL: {
-      return { ...state, error: action.payload };
-    }
-
-    case FETCH_PLACES_END: {
-      return { ...state, isFetching: false };
-    }
-
-    case ADD_PLACE_SUCCESS: {
-      return { ...state, data: [...state.data, action.payload] };
-    }
-
-    case MERGE_PLACES: {
-      return {
-        ...state,
-        data: [...state.data, ...action.payload],
-        isFetching: true
-      };
+      return { ...state, error: action.payload, isFetching: false };
     }
 
     default:

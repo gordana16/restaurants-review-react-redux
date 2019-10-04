@@ -8,6 +8,11 @@ import MapMarkers from "./MapMarkers";
 import AddPlaceForm from "./AddPlaceForm";
 import ErrorModal from "../../../shared/errors/ErrorModal";
 import { fetchPlaces, addPlace, resetAddPlaceForm } from "../../../actions";
+import {
+  getPlaces,
+  getError,
+  isFetching
+} from "../../../selectors/placesSelector";
 
 class GoogleMap extends Component {
   static contextType = ReactReduxContext;
@@ -99,11 +104,11 @@ class GoogleMap extends Component {
   };
 
   renderMarkers() {
-    const { isFetching } = this.props;
+    const { isFetching, places } = this.props;
     if (isFetching) {
       return null;
     }
-    return <MapMarkers redirect={this.navigatePage} />;
+    return <MapMarkers places={places} redirect={this.navigatePage} />;
   }
   render() {
     const { onLoadError, redirect, placeId } = this.state;
@@ -123,11 +128,10 @@ class GoogleMap extends Component {
 }
 
 const mapStateToProps = state => {
-  const { data, error, isFetching } = state.places;
   return {
-    places: data,
-    error: error,
-    isFetching: isFetching
+    places: getPlaces(state),
+    error: getError(state),
+    isFetching: isFetching(state)
   };
 };
 export default connect(

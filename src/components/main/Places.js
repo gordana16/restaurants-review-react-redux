@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import StarRatings from "react-star-ratings";
+import { getPlaces } from "../../selectors/placesSelector";
 
 class Places extends Component {
   renderPlaces() {
@@ -29,6 +30,6 @@ class Places extends Component {
 }
 
 const mapStateToProps = state => {
-  return { places: state.places.data };
+  return { places: getPlaces(state) };
 };
 export default connect(mapStateToProps)(Places);

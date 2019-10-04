@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import MapMarker from "./marker/MapMarker";
 
 class MapMarkers extends Component {
@@ -17,8 +16,4 @@ class MapMarkers extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return { places: state.places.data };
-};
-
-export default connect(mapStateToProps)(MapMarkers);
+export default MapMarkers;
