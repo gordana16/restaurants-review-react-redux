@@ -118,7 +118,7 @@ class GoogleMap extends Component {
     }
     return (
       <React.Fragment>
-        <div className="map" ref={this.ref} />
+        <div className="map flex-grow-1 order-1 order-md-2" ref={this.ref} />
         <ToastContainer />
         {this.renderMarkers()}
         <ErrorModal error={error} />

@@ -8,7 +8,7 @@ import "./styles/App.css";
 function App() {
   return (
     <Router>
-      <div className="main-container">
+      <div className="main-container d-flex flex-column flex-md-row flex-md-wrap  align-content-start">
         <Header />
         <Route path="/" exact component={() => <Redirect to="/places" />} />
         <Route path="/places" exact component={Main} />
