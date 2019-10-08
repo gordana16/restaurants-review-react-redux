@@ -52,9 +52,8 @@ class PlaceDetail extends Component {
     const { place, error, isFetching } = this.props;
 
     if (isFetching) {
-      return <div>Loading...</div>;
+      return <div className="loading-place">Loading...</div>;
     }
-
     if (error) {
       return <ErrorModal error={error} redirectTo={"/places"} />;
     }
@@ -63,8 +62,8 @@ class PlaceDetail extends Component {
       <div className="place-detail container-fluid">
         <ToastContainer />
         <div className="row">
-          <div className="col-md-9">
-            <div className="heading mt-5">
+          <div className="col-md-9 mb-3">
+            <div className="heading">
               <h1 className="mr-3">{place.name}</h1>
               <StarRatings
                 name="rating"
@@ -91,7 +90,7 @@ class PlaceDetail extends Component {
                 {this.renderCarousel()}
               </div>
               <div className="col-sm-6 col-md-5">
-                <div className="review-container h-100">
+                <div className="review-container">
                   <h2 className="mb-4">Leave a review:</h2>
                   <ReviewForm onSubmit={this.onSubmit} />
                 </div>

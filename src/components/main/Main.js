@@ -5,10 +5,11 @@ import Places from "./Places";
 class Main extends Component {
   render() {
     return (
-      <div className="content">
+      // <div className="content d-flex flex-column flex-md-row">
+      <React.Fragment>
         <GoogleMap />
         <Places />
-      </div>
+      </React.Fragment>
     );
   }
 }
