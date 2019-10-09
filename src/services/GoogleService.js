@@ -9,6 +9,7 @@ class GoogleService {
     instance = this;
     this.map = null;
     this.placesService = null;
+    this.streeViewService = null;
     this.infoWindow = null;
   }
 
@@ -31,6 +32,7 @@ class GoogleService {
   }
 
   initService(mapNode) {
+    this.streetViewService = new window.google.maps.StreetViewService();
     if (this.placesService && !mapNode) {
       return;
     }
@@ -97,14 +99,25 @@ class GoogleService {
   }
 
   getPlaceDetails(placeId) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.placesService.getDetails({ placeId: placeId }, (results, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          resolve(results);
-        } else {
-          reject(`Google Place Service failed with status ${status}`);
-        }
+        resolve(results);
       });
+    });
+  }
+
+  getPlaceStreetView(latlng) {
+    return new Promise((resolve, reject) => {
+      this.streetViewService.getPanorama(
+        { location: latlng },
+        (results, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            resolve(results);
+          } else {
+            reject(`${status}`);
+          }
+        }
+      );
     });
   }
 }

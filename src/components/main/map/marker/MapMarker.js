@@ -12,6 +12,7 @@ class MapMarker extends Component {
       return;
     }
     const { place, redirect } = this.props;
+
     const opacity = getOpacity(place.rating);
     const marker = new window.google.maps.Marker({
       icon: "img/place_icon.png",
