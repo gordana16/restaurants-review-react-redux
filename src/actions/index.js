@@ -113,3 +113,8 @@ export const updateRating = (place_id, rating) => ({
 export const resetAddPlaceForm = () => ({
   type: RESET_ADD_PLACE_FORM
 });
+
+export const fetchPlaceStreetView = location =>
+  google
+    .getPlaceStreetView(location)
+    .then(result => result.location.pano, () => {});
