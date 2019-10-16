@@ -6,13 +6,23 @@ import { ToastContainer, toast } from "react-toastify";
 import ErrorModal from "../../shared/errors/ErrorModal";
 import ReviewForm from "./ReviewForm";
 import Reviews from "./Reviews";
-import { fetchPlaceDetails, addReview, updateRating } from "../../actions";
+import {
+  fetchPlaceDetails,
+  fetchPlaceDetailsReset,
+  addReview,
+  updateRating
+} from "../../actions";
 import { getPlace, getError, isFetching } from "../../selectors/placeSelector";
+import google from "../../services/GoogleService";
 
 class PlaceDetail extends Component {
   componentDidMount() {
     const { id } = this.props.match.params;
-    this.props.fetchPlaceDetails(id);
+
+    google
+      .getAPI()
+      .then(() => google.initService())
+      .then(() => this.props.fetchPlaceDetails(id));
   }
 
   componentDidUpdate(prevProps) {
@@ -25,6 +35,10 @@ class PlaceDetail extends Component {
       const { place } = this.props;
       this.props.updateRating(place.place_id, place.rating);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.fetchPlaceDetailsReset();
   }
 
   renderCarousel = () => {
@@ -50,7 +64,6 @@ class PlaceDetail extends Component {
 
   render() {
     const { place, error, isFetching } = this.props;
-
     if (isFetching) {
       return <div className="loading-place">Loading...</div>;
     }
@@ -114,5 +127,5 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { addReview, updateRating, fetchPlaceDetails }
+  { addReview, updateRating, fetchPlaceDetails, fetchPlaceDetailsReset }
 )(PlaceDetail);

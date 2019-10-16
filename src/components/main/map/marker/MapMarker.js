@@ -5,22 +5,29 @@ import InfoWindowContent from "./InfoWindowContent";
 import { getOpacity } from "../../../../shared/utilities";
 
 class MapMarker extends Component {
-  map = google.getMap();
-
   componentDidMount() {
-    if (!this.map) {
-      return;
-    }
+    const map = google.getMap();
+    const markers = google.getMarkers();
     const { place, redirect } = this.props;
+    let marker = null;
+
+    marker = markers.find(
+      marker =>
+        marker.position.lat() === place.geometry.location.lat() &&
+        marker.position.lng() === place.geometry.location.lng()
+    );
+    if (!marker) {
+      marker = new window.google.maps.Marker({
+        icon: "img/place_icon.png",
+        title: place.name,
+        position: place.geometry.location
+      });
+      marker.setMap(map);
+      google.addMarker(marker);
+    }
 
     const opacity = getOpacity(place.rating);
-    const marker = new window.google.maps.Marker({
-      icon: "img/place_icon.png",
-      title: place.name,
-      position: place.geometry.location
-    });
     marker.setOptions({ opacity: opacity });
-    marker.setMap(this.map);
 
     marker.addListener("click", function() {
       const infoWindow = google.getInfoWindow();
@@ -34,9 +41,10 @@ class MapMarker extends Component {
           .getElementById("iw-btn")
           .addEventListener("click", () => redirect(place.place_id));
       });
-      infoWindow.open(this.map, marker);
+      infoWindow.open(map, marker);
     });
   }
+
   render() {
     return null;
   }

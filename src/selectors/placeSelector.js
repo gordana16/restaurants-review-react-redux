@@ -1,27 +1,38 @@
 import { createSelector } from "reselect";
 
-const placeSelector = state => state.place.details;
-const placeIdSelector = state => state.place.details.place_id;
-const placeReviewsSelector = state => state.place.details.reviews;
-const placeRatingSelector = state => state.place.details.rating;
-const totalUserRatingSelector = state => state.place.details.user_ratings_total;
-const localAddsOnSelector = state => state.localAddsOn;
 export const getError = state => state.place.error;
 export const isFetching = state => state.place.isFetching;
 
+const placeSelector = state => state.place.details;
+
+const localAddsOnSelector = state => state.localAddsOn;
+
+const placeIdSelector = createSelector(
+  placeSelector,
+  place => place.place_id
+);
+const placeRatingSelector = createSelector(
+  placeSelector,
+  place => place.rating || 0
+);
+const totalUserRatingSelector = createSelector(
+  placeSelector,
+  place => place.user_ratings_total || 0
+);
+const placeReviewsSelector = createSelector(
+  placeSelector,
+  place => place.reviews || []
+);
 const localReviewsByIdSelector = createSelector(
   placeIdSelector,
   localAddsOnSelector,
-  (id, localPlace) => (localPlace[id] ? localPlace[id].reviews : [])
+  (id, localPlaceAdds) => (localPlaceAdds[id] ? localPlaceAdds[id].reviews : [])
 );
 
 const allReviewsByIdSelector = createSelector(
   placeReviewsSelector,
   localReviewsByIdSelector,
-  (reviews, localReviews) => {
-    if (!reviews) return localReviews;
-    return [...reviews, ...localReviews];
-  }
+  (reviews, localReviews) => [...reviews, ...localReviews]
 );
 
 const totalRatingSelector = createSelector(
@@ -29,8 +40,7 @@ const totalRatingSelector = createSelector(
   localReviewsByIdSelector,
   placeRatingSelector,
   (totalUser, localReviews, currentRating) => {
-    if (!localReviews || !localReviews.length) return currentRating;
-    totalUser = totalUser ? totalUser : 0;
+    if (!localReviews.length) return currentRating;
     const totalRating =
       totalUser * currentRating +
       localReviews.reduce((rating, review) => rating + review.rating, 0);
@@ -43,7 +53,5 @@ export const getPlace = createSelector(
   placeSelector,
   allReviewsByIdSelector,
   totalRatingSelector,
-  (place, reviews, rating) => {
-    return { ...place, reviews, rating };
-  }
+  (place, reviews, rating) => ({ ...place, reviews, rating })
 );

@@ -11,6 +11,7 @@ class GoogleService {
     this.placesService = null;
     this.streeViewService = null;
     this.infoWindow = null;
+    this.markers = [];
   }
 
   getAPI() {
@@ -32,17 +33,23 @@ class GoogleService {
   }
 
   initService(mapNode) {
-    this.streetViewService = new window.google.maps.StreetViewService();
-    if (this.placesService && !mapNode) {
-      return;
+    if (!this.map || (this.map && mapNode)) {
+      const container = mapNode || document.createElement("div");
+      this.map = new window.google.maps.Map(container, {
+        center: { lat: 0, lng: 0 },
+        zoom: 14
+      });
+      this.updateMarkers(this.map);
+      this.placesService = new window.google.maps.places.PlacesService(
+        this.map
+      );
+
+      if (!this.streeViewService)
+        this.streetViewService = new window.google.maps.StreetViewService();
+      if (!this.infoWindow) {
+        this.infoWindow = new window.google.maps.InfoWindow();
+      }
     }
-    const container = mapNode ? mapNode : document.createElement("div");
-    this.map = new window.google.maps.Map(container, {
-      center: { lat: 0, lng: 0 },
-      zoom: 14
-    });
-    this.placesService = new window.google.maps.places.PlacesService(this.map);
-    this.infoWindow = new window.google.maps.InfoWindow();
   }
 
   getMap() {
@@ -50,10 +57,16 @@ class GoogleService {
   }
 
   getInfoWindow() {
-    if (window.google) {
-      window.google.maps.event.clearListeners(this.infoWindow, "domready");
-    }
+    window.google.maps.event.clearListeners(this.infoWindow, "domready");
     return this.infoWindow;
+  }
+  closeInfoWindowOnUnload() {
+    if (this.infoWindow) {
+      ["domready", "closeclick", "position_changed"].forEach(e =>
+        window.google.maps.event.clearListeners(this.infoWindow, e)
+      );
+      this.infoWindow.close();
+    }
   }
   getCurrentLocation() {
     return new Promise((resolve, reject) => {
@@ -99,9 +112,13 @@ class GoogleService {
   }
 
   getPlaceDetails(placeId) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.placesService.getDetails({ placeId: placeId }, (results, status) => {
-        resolve(results);
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          resolve(results);
+        } else {
+          reject(`Google Place Service failed with status ${status}`);
+        }
       });
     });
   }
@@ -111,7 +128,7 @@ class GoogleService {
       this.streetViewService.getPanorama(
         { location: latlng },
         (results, status) => {
-          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          if (status === window.google.maps.StreetViewStatus.OK) {
             resolve(results);
           } else {
             reject(`${status}`);
@@ -119,6 +136,23 @@ class GoogleService {
         }
       );
     });
+  }
+
+  addMarker(marker) {
+    this.markers.push(marker);
+  }
+
+  getMarkers() {
+    return this.markers;
+  }
+
+  updateMarkers(map) {
+    this.markers.forEach(marker => marker.setMap(map));
+  }
+  releaseMarkers() {
+    this.markers.forEach(marker =>
+      window.google.maps.event.clearListeners(marker, "click")
+    );
   }
 }
 

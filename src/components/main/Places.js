@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import StarRatings from "react-star-ratings";
-import { getPlaces } from "../../selectors/placesSelector";
+import { getPlaces, isSorting } from "../../selectors/placesSelector";
 
 class Places extends Component {
   renderPlaces() {
     const { places } = this.props;
+
     return places.map(place => (
       <li className="list-group-item " key={place.place_id}>
         <StarRatings
@@ -32,6 +33,6 @@ class Places extends Component {
 }
 
 const mapStateToProps = state => {
-  return { places: getPlaces(state) };
+  return { places: getPlaces(state), isSorting: isSorting(state) };
 };
 export default connect(mapStateToProps)(Places);

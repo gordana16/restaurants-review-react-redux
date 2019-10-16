@@ -1,10 +1,13 @@
 import google from "../services/GoogleService";
 import {
-  FETCH_PLACES_INIT,
+  FETCH_PLACES_RESET,
   FETCH_PLACES_START,
   FETCH_PLACES_SUCCESS,
   FETCH_PLACES_FAIL,
-  FETCH_PLACE_BY_ID_INIT,
+  SORT_PLACES,
+  FILTER_PLACES,
+  RESET_FILTER_PLACES,
+  FETCH_PLACE_BY_ID_RESET,
   FETCH_PLACE_BY_ID_START,
   FETCH_PLACE_BY_ID_SUCCESS,
   FETCH_PLACE_BY_ID_FAIL,
@@ -16,10 +19,11 @@ import {
 
 const uuidv4 = require("uuid/v4");
 
+export const fetchPlacesReset = () => ({
+  type: FETCH_PLACES_RESET
+});
+
 export const fetchPlaces = () => dispatch => {
-  dispatch({
-    type: FETCH_PLACES_INIT
-  });
   dispatch({
     type: FETCH_PLACES_START
   });
@@ -38,17 +42,13 @@ export const fetchPlaces = () => dispatch => {
           payload: rejected
         })
     );
-  //reset current selected place
-  dispatch({
-    type: FETCH_PLACE_BY_ID_INIT
-  });
 };
 
-export const fetchPlaceDetails = id => (dispatch, getState) => {
-  dispatch({
-    type: FETCH_PLACE_BY_ID_INIT
-  });
+export const fetchPlaceDetailsReset = () => ({
+  type: FETCH_PLACE_BY_ID_RESET
+});
 
+export const fetchPlaceDetails = id => (dispatch, getState) => {
   dispatch({
     type: FETCH_PLACE_BY_ID_START,
     payload: id
@@ -68,7 +68,6 @@ export const fetchPlaceDetails = id => (dispatch, getState) => {
   }
   return google
     .getAPI()
-    .then(() => google.initService())
     .then(() => google.getPlaceDetails(id))
     .then(
       place =>
@@ -76,11 +75,12 @@ export const fetchPlaceDetails = id => (dispatch, getState) => {
           type: FETCH_PLACE_BY_ID_SUCCESS,
           payload: place
         }),
-      rejected =>
+      rejected => {
         dispatch({
           type: FETCH_PLACE_BY_ID_FAIL,
           payload: rejected
-        })
+        });
+      }
     );
 };
 
@@ -96,7 +96,7 @@ export const addPlace = place => dispatch => {
     }
   });
   dispatch({
-    type: RESET_ADD_PLACE_FORM
+    type: RESET_FILTER_PLACES
   });
 };
 
@@ -118,3 +118,17 @@ export const fetchPlaceStreetView = location =>
   google
     .getPlaceStreetView(location)
     .then(result => result.location.pano, () => {});
+
+export const sortPlaces = direction => ({
+  type: SORT_PLACES,
+  payload: direction
+});
+
+export const filterPlaces = filter => ({
+  type: FILTER_PLACES,
+  payload: filter
+});
+
+export const resetFilterPlaces = () => ({
+  type: RESET_FILTER_PLACES
+});
