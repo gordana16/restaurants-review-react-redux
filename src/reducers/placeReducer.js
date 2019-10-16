@@ -1,5 +1,5 @@
 import {
-  FETCH_PLACE_BY_ID_INIT,
+  FETCH_PLACE_BY_ID_RESET,
   FETCH_PLACE_BY_ID_START,
   FETCH_PLACE_BY_ID_SUCCESS,
   FETCH_PLACE_BY_ID_FAIL
@@ -13,7 +13,7 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case FETCH_PLACE_BY_ID_INIT: {
+    case FETCH_PLACE_BY_ID_RESET: {
       return INITIAL_STATE;
     }
     case FETCH_PLACE_BY_ID_START: {

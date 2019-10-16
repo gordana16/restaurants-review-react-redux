@@ -7,11 +7,17 @@ import google from "../../../services/GoogleService";
 import MapMarkers from "./MapMarkers";
 import AddPlaceForm from "./AddPlaceForm";
 import ErrorModal from "../../../shared/errors/ErrorModal";
-import { fetchPlaces, addPlace, resetAddPlaceForm } from "../../../actions";
+import {
+  fetchPlaces,
+  fetchPlacesReset,
+  addPlace,
+  resetAddPlaceForm
+} from "../../../actions";
 import {
   getPlaces,
   getError,
-  isFetching
+  isFetching,
+  getFilter
 } from "../../../selectors/placesSelector";
 
 class GoogleMap extends Component {
@@ -20,7 +26,7 @@ class GoogleMap extends Component {
     super(props);
 
     this.ref = React.createRef();
-    this.infoWindow = null;
+
     this.state = {
       onLoadError: null,
       redirect: false,
@@ -38,6 +44,8 @@ class GoogleMap extends Component {
 
   componentDidUpdate(prevProps) {
     if (
+      !this.props.filter &&
+      !prevProps.filter &&
       !prevProps.isFetching &&
       this.props.places.length > prevProps.places.length
     ) {
@@ -46,6 +54,11 @@ class GoogleMap extends Component {
     }
   }
 
+  componentWillUnmount() {
+    google.closeInfoWindowOnUnload();
+    google.releaseMarkers();
+    this.props.fetchPlacesReset();
+  }
   handleSubmitPlace = place => {
     this.props.addPlace(place);
   };
@@ -88,7 +101,11 @@ class GoogleMap extends Component {
             map: map
           });
           map.addListener("click", event => {
-            this.createInfoWindow(event, map);
+            if (this.props.filter) {
+              toast.warn("You have to reset filter before adding new place!", {
+                position: toast.POSITION.TOP_CENTER
+              });
+            } else this.createInfoWindow(event, map);
           });
 
           resolve();
@@ -105,6 +122,7 @@ class GoogleMap extends Component {
 
   renderMarkers() {
     const { isFetching, places } = this.props;
+
     if (isFetching) {
       return null;
     }
@@ -130,11 +148,12 @@ class GoogleMap extends Component {
 const mapStateToProps = state => {
   return {
     places: getPlaces(state),
+    filter: getFilter(state),
     error: getError(state),
     isFetching: isFetching(state)
   };
 };
 export default connect(
   mapStateToProps,
-  { fetchPlaces, addPlace, resetAddPlaceForm }
+  { fetchPlaces, fetchPlacesReset, addPlace, resetAddPlaceForm }
 )(GoogleMap);

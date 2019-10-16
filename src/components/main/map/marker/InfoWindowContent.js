@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import StarRatings from "react-star-ratings";
 import { fetchPlaceStreetView } from "../../../../actions";
 
 class InfoWindowContent extends Component {
@@ -34,8 +35,6 @@ class InfoWindowContent extends Component {
 
     return (
       <div className="info-window">
-        <h4> {place.name} </h4>
-        <p> {place.vicinity} </p>
         <div
           id="pano"
           ref={this.ref}
@@ -46,9 +45,19 @@ class InfoWindowContent extends Component {
             Street View data not found for this location!
           </div>
         </div>
-        <button className="btn btn-link btn-more" id="iw-btn" type="button">
-          More info
-        </button>
+        <div className="text-center mt-2">
+          <StarRatings
+            rating={place.rating}
+            starRatedColor="orange"
+            starDimension="1.5rem"
+            starSpacing=".1rem"
+          />
+          <h4> {place.name} </h4>
+          <p> {place.vicinity} </p>
+          <button className="btn btn-link btn-more" id="iw-btn" type="button">
+            More info
+          </button>
+        </div>
       </div>
     );
   }

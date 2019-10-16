@@ -1,16 +1,13 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import Modal from "react-responsive-modal";
 
 class ErrorModal extends Component {
   state = {
-    open: false,
-    redirect: false
+    open: false
   };
 
   componentDidMount() {
     const { error } = this.props;
-
     if (error) {
       this.setState({ open: true });
     }
@@ -25,16 +22,13 @@ class ErrorModal extends Component {
   }
 
   onCloseModal = () => {
-    this.setState({ open: false, redirect: true });
+    this.setState({ open: false });
   };
 
   render() {
-    const { open, redirect } = this.state;
-    const { error, redirectTo } = this.props;
+    const { open } = this.state;
+    const { error } = this.props;
 
-    if (redirect && redirectTo) {
-      return <Redirect to={redirectTo} />;
-    }
     return (
       <React.Fragment>
         <Modal

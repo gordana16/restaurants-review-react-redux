@@ -57,3 +57,18 @@
     }
   }
 }
+
+// filter & sort
+.filter-sort-box {
+  svg {
+    height: 2.75rem;
+    width: 2.75rem;
+    fill: $color-grey-light-1;
+    cursor: pointer;
+
+    &:hover,
+    &:active {
+      fill: $main-yellow-color;
+    }
+  }
+}

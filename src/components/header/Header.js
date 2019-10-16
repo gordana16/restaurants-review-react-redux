@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { matchPath } from "react-router";
+import DisplayPlacesHeader from "./SortableListHeader";
 
 class Header extends Component {
   match = () =>
@@ -27,6 +28,7 @@ class Header extends Component {
           style={this.match() ? { display: "none" } : { display: "block" }}
         >
           <span className="pl-2 pl-md-0">Nearby Restaurants</span>
+          <DisplayPlacesHeader />
         </nav>
       </React.Fragment>
     );
