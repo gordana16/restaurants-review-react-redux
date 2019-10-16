@@ -150,9 +150,10 @@ class GoogleService {
     this.markers.forEach(marker => marker.setMap(map));
   }
   releaseMarkers() {
-    this.markers.forEach(marker =>
-      window.google.maps.event.clearListeners(marker, "click")
-    );
+    this.markers.forEach(marker => {
+      window.google.maps.event.clearListeners(marker, "click");
+      marker.setVisible(true);
+    });
   }
 }
 
