@@ -37,15 +37,17 @@ class GoogleService {
       const container = mapNode || document.createElement("div");
       this.map = new window.google.maps.Map(container, {
         center: { lat: 0, lng: 0 },
-        zoom: 14
+        minZoom: 10
       });
       this.updateMarkers(this.map);
       this.placesService = new window.google.maps.places.PlacesService(
         this.map
       );
 
-      if (!this.streeViewService)
+      if (!this.streeViewService) {
         this.streetViewService = new window.google.maps.StreetViewService();
+      }
+
       if (!this.infoWindow) {
         this.infoWindow = new window.google.maps.InfoWindow();
       }
@@ -54,6 +56,12 @@ class GoogleService {
 
   getMap() {
     return this.map;
+  }
+
+  updateMapBounds() {
+    const bounds = new window.google.maps.LatLngBounds();
+    this.markers.forEach(marker => bounds.extend(marker.position));
+    this.map.fitBounds(bounds);
   }
 
   getInfoWindow() {
@@ -137,6 +145,7 @@ class GoogleService {
   }
 
   addMarker(marker) {
+    marker.setMap(this.map);
     this.markers.push(marker);
   }
 

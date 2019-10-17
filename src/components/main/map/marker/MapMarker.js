@@ -6,7 +6,6 @@ import { getOpacity } from "../../../../shared/utilities";
 
 class MapMarker extends Component {
   componentDidMount() {
-    const map = google.getMap();
     const markers = google.getMarkers();
     const { place, redirect } = this.props;
     let marker = null;
@@ -21,7 +20,6 @@ class MapMarker extends Component {
         title: place.name,
         position: place.geometry.location
       });
-      marker.setMap(map);
       google.addMarker(marker);
     }
 
@@ -40,6 +38,7 @@ class MapMarker extends Component {
           .getElementById("iw-btn")
           .addEventListener("click", () => redirect(place.place_id));
       });
+      const map = google.getMap();
       infoWindow.open(map, marker);
     });
   }
