@@ -22,7 +22,11 @@ class ErrorModal extends Component {
   }
 
   onCloseModal = () => {
+    const { redirect } = this.props;
     this.setState({ open: false });
+    if (redirect) {
+      this.props.redirect();
+    }
   };
 
   render() {

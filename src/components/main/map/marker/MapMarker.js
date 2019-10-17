@@ -10,7 +10,6 @@ class MapMarker extends Component {
     const markers = google.getMarkers();
     const { place, redirect } = this.props;
     let marker = null;
-
     marker = markers.find(
       marker =>
         marker.position.lat() === place.geometry.location.lat() &&
@@ -18,7 +17,7 @@ class MapMarker extends Component {
     );
     if (!marker) {
       marker = new window.google.maps.Marker({
-        icon: "img/place_icon.png",
+        icon: "/img/place_icon.png",
         title: place.name,
         position: place.geometry.location
       });

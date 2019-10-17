@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { matchPath } from "react-router";
-import DisplayPlacesHeader from "./SortableListHeader";
+import SortableListHeader from "./SortableListHeader";
 
 class Header extends Component {
   match = () =>
@@ -16,7 +16,7 @@ class Header extends Component {
         <nav className="navbar navbar-1 flex-grow-1 order-0 ">
           <Link to="/" className="navbar-brand">
             <img
-              src="img/logo.png"
+              src="/img/logo.png"
               className="d-inline-block align-top"
               alt=""
             />
@@ -28,7 +28,7 @@ class Header extends Component {
           style={this.match() ? { display: "none" } : { display: "block" }}
         >
           <span className="pl-2 pl-md-0">Nearby Restaurants</span>
-          <DisplayPlacesHeader />
+          <SortableListHeader />
         </nav>
       </React.Fragment>
     );
