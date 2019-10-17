@@ -73,6 +73,7 @@ class GoogleMap extends Component {
     const store = this.context.store;
 
     infoWindow.addListener("domready", () => {
+      this.props.resetAddPlaceForm();
       ReactDOM.render(
         <Provider store={store}>
           <div className="info-window">
@@ -84,9 +85,6 @@ class GoogleMap extends Component {
       );
     });
 
-    ["closeclick", "position_changed"].forEach(e =>
-      infoWindow.addListener(e, () => this.props.resetAddPlaceForm())
-    );
     infoWindow.open(map);
   }
 

@@ -62,9 +62,7 @@ class GoogleService {
   }
   closeInfoWindowOnUnload() {
     if (this.infoWindow) {
-      ["domready", "closeclick", "position_changed"].forEach(e =>
-        window.google.maps.event.clearListeners(this.infoWindow, e)
-      );
+      window.google.maps.event.clearListeners(this.infoWindow, "domready");
       this.infoWindow.close();
     }
   }

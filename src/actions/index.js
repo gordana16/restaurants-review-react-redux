@@ -95,9 +95,6 @@ export const addPlace = place => dispatch => {
       geometry: { location: position }
     }
   });
-  dispatch({
-    type: RESET_FILTER_PLACES
-  });
 };
 
 export const addReview = (place_id, review) => ({
