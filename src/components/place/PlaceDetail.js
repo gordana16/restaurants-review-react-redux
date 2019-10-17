@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { UncontrolledCarousel } from "reactstrap";
 import StarRatings from "react-star-ratings";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,6 +17,13 @@ import { getPlace, getError, isFetching } from "../../selectors/placeSelector";
 import google from "../../services/GoogleService";
 
 class PlaceDetail extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirect: false
+    };
+  }
   componentDidMount() {
     const { id } = this.props.match.params;
 
@@ -41,6 +49,8 @@ class PlaceDetail extends Component {
     this.props.fetchPlaceDetailsReset();
   }
 
+  navigatePage = () => this.setState({ redirect: true });
+
   renderCarousel = () => {
     const { photos } = this.props.place;
     if (!photos) {
@@ -64,11 +74,14 @@ class PlaceDetail extends Component {
 
   render() {
     const { place, error, isFetching } = this.props;
+    if (this.state.redirect) {
+      return <Redirect to={`/`} />;
+    }
     if (isFetching) {
       return <div className="loading-place">Loading...</div>;
     }
     if (error) {
-      return <ErrorModal error={error} redirectTo={"/places"} />;
+      return <ErrorModal error={error} redirect={this.navigatePage} />;
     }
 
     return (

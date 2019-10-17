@@ -36,7 +36,7 @@ class SortableListHeader extends Component {
           className="down-icon mt-1"
           onClick={() => this.handleSortClick(DESC_SORT)}
         >
-          <use xlinkHref="img/sprite.svg#icon-triangle-down"></use>
+          <use xlinkHref="/img/sprite.svg#icon-triangle-down"></use>
         </svg>
 
         <svg
@@ -48,7 +48,7 @@ class SortableListHeader extends Component {
           className="up-icon mt-1 mr-1"
         >
           <use
-            xlinkHref="img/sprite.svg#icon-triangle-up"
+            xlinkHref="/img/sprite.svg#icon-triangle-up"
             onClick={() => this.handleSortClick(ASC_SORT)}
           ></use>
         </svg>
