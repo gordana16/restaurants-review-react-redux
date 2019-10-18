@@ -37,6 +37,7 @@ class GoogleService {
       const container = mapNode || document.createElement("div");
       this.map = new window.google.maps.Map(container, {
         center: { lat: 0, lng: 0 },
+        zoom: 13,
         minZoom: 10
       });
       this.updateMarkers(this.map);

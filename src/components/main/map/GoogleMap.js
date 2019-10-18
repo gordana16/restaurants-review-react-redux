@@ -44,7 +44,7 @@ class GoogleMap extends Component {
 
   componentDidUpdate(prevProps) {
     //update map bounds only on navigating to map page
-    if (prevProps.isFetching) {
+    if (prevProps.isFetching && !this.props.error) {
       google.updateMapBounds();
     }
 
