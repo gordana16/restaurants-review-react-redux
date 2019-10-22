@@ -15,7 +15,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 All added places and reviews persist during the session with the help of Redux state. Sorting and filtering places are also enabled.
 
 To view the application click the following link
-https://explore-nearby-restaurants.netlify.com/places
+
+https://explore-nearby-restaurants.netlify.com/
 
 ## Available Scripts
 
